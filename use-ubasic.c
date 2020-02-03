@@ -29,22 +29,35 @@
  */
 
 #include "ubasic.h"
+#include <stdio.h>
 
 static const char program[] =
-"10 gosub 100\n\
-20 for i = 1 to 10\n\
-30 print i\n\
-40 next i\n\
-50 print \"end\"\n\
-60 end\n\
-100 print \"subroutine\"\n\
-110 return\n";
+"10 print \"Welcome to WASI BASIC!\"\n\
+20 print \"Try passing a filename\"\n\
+";
 
 /*---------------------------------------------------------------------------*/
 int
-main(void)
+main(int argc, char **argv)
 {
-  ubasic_init(program);
+  if (argc > 1) {
+    char source[9999];
+    FILE *fp = fopen(argv[1], "r"); 
+    if (fp != NULL) {
+      size_t newLen = fread(source, sizeof(char), 9999, fp);
+      if ( ferror( fp ) != 0 ) {
+        fputs("Error reading file", stderr);
+      } else {
+        source[newLen++] = '\0'; /* Just to be safe. */
+      }
+
+    fclose(fp);
+    ubasic_init(source);
+    }
+  } 
+  else {
+      ubasic_init(program);
+  }
 
   do {
     ubasic_run();

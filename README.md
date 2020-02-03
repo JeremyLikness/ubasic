@@ -1,6 +1,18 @@
 uBASIC: a really simple BASIC interpreter
 =========================================
 
+> Forked to build a WASI (WAPM) module for this. Modified `use-ubasic.c`
+
+## WASI steps
+
+`wasicc tokenizer.c ubasic.c use-ubasic.c -o basic.wasm`
+
+Run with `wasirun`:
+
+`wasirun basic.wasm sample.bas`
+
+## Original documentation
+
 http://dunkels.com/adam/ubasic/
 
 Written in a couple of hours, for the fun of it. Ended up being used in a bunch of places!
